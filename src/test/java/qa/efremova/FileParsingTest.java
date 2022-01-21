@@ -4,7 +4,6 @@ import com.codeborne.pdftest.PDF;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.opencsv.CSVReader;
-import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -65,9 +64,6 @@ public class FileParsingTest {
             }
 
         }
-
-        ZipFile zf = new ZipFile(new File(cl.getResource("files/sample-zip-file.zip").toURI()));
-
 
 
     }
