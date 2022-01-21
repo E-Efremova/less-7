@@ -1,5 +1,7 @@
 package qa.efremova;
 
+import com.codeborne.pdftest.PDF;
+import com.codeborne.xlstest.XLS;
 import com.opencsv.CSVReader;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ public class FileParsingZipTest {
     void parseZipFile() throws Exception {
 
             ZipFile zipFile = new ZipFile("src\\test\\resources\\sample-zip-file.zip");// открыть архив
+            // Работаем с CSV
             ZipEntry zipEntryCsv = zipFile.getEntry("test.csv");// извлекаем файл из архива
             try (InputStream inputStream = zipFile.getInputStream(zipEntryCsv)) {
                 CSVReader reader = new CSVReader(new InputStreamReader(inputStream));
@@ -29,6 +32,22 @@ public class FileParsingZipTest {
                         );
 
             }
+
+            // работаем с PDF
+            ZipEntry zipEntryPdf= zipFile.getEntry("Pdf-test.pdf");// извлекаем файл из архива
+            try (InputStream inputStream = zipFile.getInputStream(zipEntryPdf)) {
+            PDF parsed = new PDF(inputStream);
+            assertThat(parsed.content).contains("Отправка товара");
+        }
+
+        // работаем с xls
+           ZipEntry zipEntryXls= zipFile.getEntry("Xls-test.xls");// извлекаем файл из архива
+           try (InputStream inputStream = zipFile.getInputStream(zipEntryXls)) {
+               XLS parsed = new XLS(inputStream);
+          assertThat(parsed.excel.getSheetAt(0).getRow(1).getCell(1).getStringCellValue())
+                   .isEqualTo("тест");
+                   }
+
         }
     }
 
